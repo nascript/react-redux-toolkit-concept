@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, productSelectors } from '../features/productSlice'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { deleteProduct } from '../features/productSlice'
+import Pagination from './Pagination'
 
 const ShowProduct = () => {
   // const { title, price } = useSelector((state) => state.product)
@@ -21,19 +23,22 @@ const ShowProduct = () => {
     navigate(`/edit/${id}`)
   }
   const handleDelete = (id) => {
-   Swal.fire({
-     title: 'Are you sure?',
-     text: "You won't be able to delete this!",
-     icon: 'warning',
-     showCancelButton: true,
-     confirmButtonColor: '#3085d6',
-     cancelButtonColor: '#d33',
-     confirmButtonText: 'Yes, delete it!',
-   }).then((result) => {
-     if (result.isConfirmed) {
-       Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
-     }
-   })
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to delete this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await dispatch(deleteProduct(id))
+        navigate('/')
+        Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+        dispatch(getProducts())
+      }
+    })
   }
 
   return (
@@ -60,7 +65,10 @@ const ShowProduct = () => {
                 >
                   Edit
                 </button>
-                <button onClick={() => handleDelete(product.id)}className='button is-danger is-light is-small m-1'>
+                <button
+                  onClick={() => handleDelete(product.id)}
+                  className='button is-danger is-light is-small m-1'
+                >
                   Hapus
                 </button>
               </td>
@@ -68,6 +76,7 @@ const ShowProduct = () => {
           ))}
         </tbody>
       </table>
+      {/* <Pagination /> */}
     </div>
   )
 }

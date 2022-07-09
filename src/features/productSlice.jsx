@@ -35,6 +35,14 @@ export const editProduct = createAsyncThunk(
     return response.data
   }
 )
+export const deleteProduct = createAsyncThunk(
+  'products/saveProduct',
+  async (id) => {
+    const response = await axios.delete(`http://localhost:5000/products/${id}`)
+    // console.log('ini data in store', response.data)
+    return response.data
+  }
+)
 
 const productEntity = createEntityAdapter({
   selectId: (product) => product.id,
@@ -54,6 +62,9 @@ const productSlice = createSlice({
     },
     [editProduct.fulfilled]: (state, action) => {
       productEntity.updateOne(state, action.payload)
+    },
+    [deleteProduct.fulfilled]: (state, action) => {
+      productEntity.removeOne(state, action.payload)
     },
   },
 })

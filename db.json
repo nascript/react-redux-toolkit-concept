@@ -11,19 +11,9 @@
       "price": 40
     },
     {
-      "title": "NAS",
-      "price": "32",
-      "id": 3
-    },
-    {
       "id": 4,
       "title": "Nasi Putih",
       "price": 6
-    },
-    {
-      "title": "LAMA KALI",
-      "price": "123223",
-      "id": 5
     }
   ]
 }

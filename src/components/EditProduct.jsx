@@ -1,29 +1,35 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
+import { useNavigate, useParams } from 'react-router-dom'
+import { editProduct } from '../features/productSlice'
+
 // import { update } from '../features/productSlice'
 
 const EditProduct = () => {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
+  const dispatch = useDispatch()
+  const params = useParams()
+  const navigate = useNavigate()
+  console.log('params', params)
+  const id = params.id
   // const dispatch = useDispatch()
 
-  const editProduct = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault()
-    // dispatch(update({ title, price }))
-  }
-
-  const handleSave = (e) => {
     Swal.fire({
       title: 'Do you want to save the changes?',
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: 'Save',
       denyButtonText: `Don't save`,
-    }).then((result) => {
+    }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire('Saved!', '', 'success')
+        await dispatch(editProduct({ title, price, id }))
+        navigate('/')
       } else if (result.isDenied) {
         Swal.fire('Changes are not saved', '', 'info')
       }
@@ -31,7 +37,7 @@ const EditProduct = () => {
   }
 
   return (
-    <form className='box mt-5' onSubmit={editProduct}>
+    <form className='box mt-5' onSubmit={handleSave}>
       <div className='field'>
         <div className='label'>Title</div>
         <div className='control'>

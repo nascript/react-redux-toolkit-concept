@@ -1,19 +1,37 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import Swal from 'sweetalert2'
 // import { update } from '../features/productSlice'
 
-const AddProduct = () => {
+const EditProduct = () => {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   // const dispatch = useDispatch()
 
-  const updateProduct = (e) => {
+  const editProduct = (e) => {
     e.preventDefault()
     // dispatch(update({ title, price }))
   }
 
+  const handleSave = (e) => {
+    Swal.fire({
+      title: 'Do you want to save the changes?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire('Saved!', '', 'success')
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
+  }
+
   return (
-    <form className='box mt-5' onSubmit={updateProduct}>
+    <form className='box mt-5' onSubmit={editProduct}>
       <div className='field'>
         <div className='label'>Title</div>
         <div className='control'>
@@ -39,10 +57,12 @@ const AddProduct = () => {
         </div>
       </div>
       <div className='field'>
-        <button className='button is-success'>Submit</button>
+        <button onClick={() => handleSave()} className='button is-success'>
+          Update
+        </button>
       </div>
     </form>
   )
 }
 
-export default AddProduct
+export default EditProduct
